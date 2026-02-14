@@ -32,7 +32,7 @@ jobs:
       - name: Deploy to EdgeOne
         run: |
           # 使用官方 CLI 部署 _site 目录
-          npx edgeone pages deploy ./_site -n myblog -t $ -e production
+          npx edgeone pages deploy ./_site -n myblog -t ${{ secrets.EDGEONE_API_TOKEN }} -e production
         env:
           # 从仓库密钥中读取 Token
-          EDGEONE_TOKEN: ${{ secrets.EDGEONE_TOKEN }}
+          EDGEONE_API_TOKEN: ${{ secrets.EDGEONE_API_TOKEN }}
