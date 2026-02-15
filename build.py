@@ -145,6 +145,43 @@ def get_file_mtime(path: Path) -> float:
         return 0.0
 
 
+def get_file_updated_time(path: Path) -> str:
+    """
+    获取文件的最后更新时间，返回 ISO 8601 格式字符串。
+
+    优先使用 git log 获取最后一次提交时间（更准确地反映内容变更），
+    如果 git 不可用或文件未被 git 追踪，则回退到文件系统的修改时间。
+
+    参数:
+        path: 文件路径
+
+    返回:
+        str: ISO 8601 格式的日期时间字符串（如 "2025-06-03T15:30:45+08:00"）
+    """
+    # 优先尝试 git log
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%cI", "--", str(path)],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            cwd=Path(__file__).parent,
+        )
+        if result.returncode == 0:
+            git_date = result.stdout.strip()
+            if git_date:
+                # 验证格式有效
+                datetime.fromisoformat(git_date)
+                return git_date
+    except (FileNotFoundError, ValueError, Exception):
+        pass
+
+    # 回退到文件系统修改时间
+    mtime = path.stat().st_mtime
+    dt = datetime.fromtimestamp(mtime, tz=timezone.utc)
+    return dt.isoformat()
+
+
 def is_dep_file(path: Path) -> bool:
     """
     判断一个文件是否被追踪为依赖）。
@@ -499,6 +536,9 @@ def build_html(force: bool = False) -> bool:
         except ValueError:
             page_path = ""
 
+        # 获取文件最后更新时间
+        updated = get_file_updated_time(typ_file)
+
         return [
             "compile",
             "--root",
@@ -511,6 +551,8 @@ def build_html(force: bool = False) -> bool:
             "html",
             "--input",
             f"page-path={page_path}",
+            "--input",
+            f"updated={updated}",
             str(typ_file),
             str(output_path),
         ]
@@ -803,7 +845,7 @@ def extract_post_metadata(index_html: Path) -> tuple[str, str, str, datetime | N
         2. 描述 (description): 从 <meta name="description"> 提取
         3. 链接 (link): 从 <link rel="canonical" href="..."> 提取
         4. 日期 (date): 依次尝试从以下来源获取：
-            - HTML 中的 <meta name="date" content="...">
+            - HTML 中的 <meta name="date" content="..."> ISO 8601 YYYY-MM-DDThh:mm:ssZ 格式
             - 文件夹名中的 YYYY-MM-DD 格式日期
 
     参数:
@@ -826,8 +868,7 @@ def extract_post_metadata(index_html: Path) -> tuple[str, str, str, datetime | N
     # 尝试从 <meta name="date"> 解析日期
     if parser.get("date"):
         try:
-            date_obj = datetime.strptime(parser["date"].split("T")[0], "%Y-%m-%d")
-            date_obj = date_obj.replace(tzinfo=timezone.utc)
+            date_obj = datetime.fromisoformat(parser["date"])
         except Exception:
             pass
 

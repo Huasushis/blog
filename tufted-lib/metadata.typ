@@ -72,6 +72,7 @@
   description: "",
   lang: "zh",
   date: none,
+  updated: none,
   website-title: "",
   website-url: none,
   image-path: none,
@@ -94,10 +95,14 @@
   html.link(rel: "icon", href: "/assets/favicon.ico")
 
   // Date
-  if type(date) == datetime {
-    html.meta(name: "date", content: date.display())
-  } else if type(date) == str {
+  if type(date) == str {
     html.meta(name: "date", content: date)
+    html.elem("meta", attrs: (property: "og:article:published_time", content: date))
+  }
+
+  if type(updated) == str {
+    html.meta(name: "updated", content: updated)
+    html.elem("meta", attrs: (property: "og:article:modified_time", content: updated))
   }
 
   // RSS feed link

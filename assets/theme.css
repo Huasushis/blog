@@ -34,6 +34,7 @@ CSS CUSTOM PROPERTIES (Theme Variables)
     --theme-table-row-even: #fafafa;
     --theme-table-row-hover: #f0f0f0;
     --theme-math-filter: none;
+    --theme-date-text: #888;
 }
 
 /* Dark mode variables */
@@ -62,6 +63,7 @@ html:not([data-theme]) {
     --theme-table-row-even: #2a2a2a;
     --theme-table-row-hover: #383838;
     --theme-math-filter: invert(1) hue-rotate(180deg);
+    --theme-date-text: #999;
 }
 
 /* System preference: only apply dark variables when no explicit theme is set */
@@ -90,6 +92,7 @@ html:not([data-theme]) {
         --theme-table-row-even: #fafafa;
         --theme-table-row-hover: #f0f0f0;
         --theme-math-filter: none;
+        --theme-date-text: #888;
     }
 }
 

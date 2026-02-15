@@ -514,6 +514,11 @@ RESPONSIVE LAYOUT
     figure[role="math"] {
         width: 100%;
     }
+
+    /* Date wrapper full width on mobile */
+    .updated-date-wrapper {
+        width: 100%;
+    }
 }
 
 
@@ -616,6 +621,33 @@ a.footnote-ref-link {
 .marginnote code {
     font-size: inherit;
 }
+
+/*******************************************************************************
+ARTICLE DATES (Created and Last Updated)
+*******************************************************************************/
+
+.article-date-wrapper {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.created-date-wrapper {
+    margin-top: 0.2em;
+    margin-bottom: 1.5em;
+}
+
+.updated-date-wrapper {
+    margin-top: 2em;
+    margin-bottom: 0;
+    padding-top: 0.8em;
+    width: 55%;
+}
+
+.article-date {
+    color: var(--theme-date-text);
+    font-style: italic;
+}
+
 
 /*******************************************************************************
 POST TILES

@@ -5,6 +5,7 @@
 #import "layout.typ": full-width, margin-note
 #import "links.typ": template-links
 #import "metadata.typ": metadata
+#import "date.typ": template-date, updated-block
 
 /// Tufted 博客模板的主包装函数。
 ///
@@ -18,6 +19,9 @@
   description: "",
   lang: "zh",
   date: none,
+  date_geo: none,
+  updated: none,
+  updated_geo: none,
   website-title: "",
   website-url: none,
 
@@ -37,12 +41,20 @@
 
   content,
 ) = {
+  // Resolve updated date (auto → sys.inputs.updated)
+  let resolved-updated = if updated == auto {
+    sys.inputs.at("updated", default: none)
+  } else {
+    updated
+  }
+
   // Apply styling
   show: template-math
   show: template-refs
   show: template-notes
   show: template-figures
   show: template-links
+  show: template-date(date: date, date_geo: date_geo)
 
   set text(lang: lang)
 
@@ -58,6 +70,7 @@
           description: description,
           lang: lang,
           date: date,
+          updated: resolved-updated,
           website-title: website-title,
           website-url: website-url,
           image-path: image-path,
@@ -80,6 +93,7 @@
           "/assets/format-headings.js",
           "/assets/theme-toggle.js",
           "/assets/marginnote-toggle.js",
+          "/assets/date-location.js",
         )
         for (js-src) in (base-js + js-scripts).dedup() {
           html.script(src: js-src)
@@ -116,7 +130,10 @@
 
         // Main content
         html.article(
-          html.section(content),
+          html.section({
+            content
+            updated-block(updated: resolved-updated, updated_geo: updated_geo)
+          }),
         )
 
         // Custom footer elements
