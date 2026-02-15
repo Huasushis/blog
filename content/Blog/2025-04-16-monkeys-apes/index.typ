@@ -3,7 +3,7 @@
 #show: template.with(
   title: "Monkeys vs Apes: Understanding the Difference",
   description: "Exploring the key differences between monkeys and apes, including physical traits, intelligence, and evolutionary relationships.",
-  date: datetime(year: 2025, month: 4, day: 16),
+  date: "2025-04-16T00:00:00Z",
   lang: "en",
 )
 

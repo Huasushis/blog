@@ -4,7 +4,7 @@
 #show: template.with(
   title: "The Normal Distribution: A Fundamental Concept in Statistics",
   description: "An in-depth look at the normal distribution, its properties, significance, and real-world applications across various fields.",
-  date: datetime(year: 2025, month: 10, day: 30),
+  date: "2025-10-30T00:00:00Z",
   lang: "en",
 )
 
