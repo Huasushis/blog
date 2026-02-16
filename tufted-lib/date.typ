@@ -24,14 +24,18 @@
   }
 }
 
-/// show rule：在 level 1 标题下方注入文章创建日期
+/// show rule：仅在第一个 level 1 标题下方注入文章创建日期
 ///
 /// 用法：`show: template-date(date: "2025-06-03T15:30:45+08:00", date_geo: "39.9,116.4")`
 #let template-date(date: none, date_geo: none) = (content) => {
   if date != none {
+    let h1-injected = state("h1-date-injected", false)
     show heading.where(level: 1): it => {
       it
-      date-element(date, "created", geo: date_geo)
+      context if not h1-injected.get() {
+        h1-injected.update(true)
+        date-element(date, "created", geo: date_geo)
+      }
     }
     content
   } else {
