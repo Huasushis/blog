@@ -1,0 +1,61 @@
+global
+// 定义一个持久化的缓存变量
+let cachedGeo = null;
+
+function getGeoSync() {
+    // 如果已经有缓存了，直接秒回结果，不再卡顿
+    if (cachedGeo !== null) {
+        return cachedGeo;
+    }
+
+    const { execSync } = require('child_process');
+    try {
+        // 只有第一次调用会触发这里的 curl
+        const result = execSync('curl -s --max-time 2 https://ipapi.co/latlong/', { encoding: 'utf8' });
+        const geo = result.trim();
+        
+        if (geo && geo !== "") {
+            cachedGeo = geo; // 写入缓存
+            return cachedGeo;
+        }
+        return "0,0";
+    } catch (e) {
+        return "0,0";
+    }
+}
+
+function getIsoDate() {
+    const now = new Date();
+    const offset = -now.getTimezoneOffset();
+    const absOffset = Math.abs(offset);
+    const z = (n) => n.toString().padStart(2, '0');
+    const sign = offset >= 0 ? '+' : '-';
+    const tz = sign + z(Math.floor(absOffset / 60)) + ':' + z(absOffset % 60);
+    return now.getFullYear() + '-' + z(now.getMonth() + 1) + '-' + z(now.getDate()) + 'T' + z(now.getHours()) + ':' + z(now.getMinutes()) + ':' + z(now.getSeconds()) + tz;
+}
+endglobal
+
+snippet metadata "Insert typst metadata header" b
+#import "../index.typ": template, tufted
+
+#show: template.with(
+  title: "${1}",
+  description: "${2}",
+  date: "``rv = getIsoDate()``",
+  date_geo: "``rv = getGeoSync()``",
+  updated: auto,
+  updated_geo: ${3:"``rv = getGeoSync()``"},
+  lang: "${4:zh}",
+)
+endsnippet
+
+snippet upgeo "Quick update geo value" w
+"``rv = getGeoSync()``"
+endsnippet
+
+snippet fgeo "Force Update Geo Cache" w
+"``
+    cachedGeo = null;
+    rv = getGeoSync();
+``"
+endsnippet
