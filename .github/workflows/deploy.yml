@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Install System Dependencies
         run: |
@@ -38,10 +40,10 @@ jobs:
           # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Deploy to EdgeOne
-        run: |
-          # 使用官方 CLI 部署 _site 目录
-          npx edgeone pages deploy ./_site -n myblog -t ${{ secrets.EDGEONE_API_TOKEN }} -e production
-        env:
-          # 从仓库密钥中读取 Token
-          EDGEONE_API_TOKEN: ${{ secrets.EDGEONE_API_TOKEN }}
+      # - name: Deploy to EdgeOne
+      #   run: |
+      #     # 使用官方 CLI 部署 _site 目录
+      #     npx edgeone pages deploy ./_site -n myblog -t ${{ secrets.EDGEONE_API_TOKEN }} -e production
+      #   env:
+      #     # 从仓库密钥中读取 Token
+      #     EDGEONE_API_TOKEN: ${{ secrets.EDGEONE_API_TOKEN }}
