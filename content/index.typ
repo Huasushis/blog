@@ -2,9 +2,8 @@
 #show: template
 
 #tufted.margin-note({
-  image("imgs/siteicon.png")
+  image("imgs/siteicon.svg")
 })
-
 
 = 新子文鉴
 

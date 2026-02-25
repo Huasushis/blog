@@ -2,6 +2,7 @@
 #import "refs.typ": template-refs
 #import "notes.typ": template-notes
 #import "figures.typ": template-figures
+#import "image.typ": template-image
 #import "layout.typ": full-width, margin-note
 #import "links.typ": template-links
 #import "metadata.typ": metadata
@@ -53,6 +54,7 @@
   show: template-refs
   show: template-notes
   show: template-figures
+  show: template-image
   show: template-links
   show: template-date(date: date, date_geo: date_geo)
 
