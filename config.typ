@@ -17,6 +17,7 @@
   
   /// 网站的站点标题。会显示在浏览器标签页以及 SEO/社交分享卡片中。
   website-title: "Huasushis's Blog",
+  image-path: "/assets/og-image.png",
   /// 网站作者。用于生成 <meta name="author"> 标签。（可选）
   author: "@Huasushis",
   /// 网站描述。用于 SEO 搜索引擎摘要和社交媒体分享预览。（可选）
